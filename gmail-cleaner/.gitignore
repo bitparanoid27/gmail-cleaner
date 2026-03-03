@@ -1,0 +1,8 @@
+/node_modules
+/.env
+/credentials.json
+/tokens.json
+/ignore
+/src/controllers/tokens.json
+/src/credentials.json
+/src/tokens.json
