@@ -2,61 +2,96 @@
 import { google } from 'googleapis';
 /* Internal modules required are  */
 
-async function retrieveUserMessages(authClient) {
-  /*Check if the user login via running authoriseLogin
-  Pass the oAuthClient received from the authoriseLogin fn to authenticate
-  Create a gmail instance to retrieve messages from the gmail.
-
-  Create a list of ids that needs to be passed to retrieve msgs.
-  Retrieved msgs need to be converted into an useful object.
-
-  */
+async function getUserMessageIds(authClient, pageToken) {
+  //   Retrieve user messages from 1 or more than 1 inbox page(s).
   try {
     const gmail = google.gmail({ version: 'v1', auth: authClient });
-    console.log('Gmail instance created successfully.');
+    console.log('Gmail instance created successfully on step 1.');
 
-    const messageMetaData = await gmail.users.messages.list({ userId: 'me' });
-    const messageIdMetaData = messageMetaData.data.messages;
+    let nextPageExists = pageToken;
 
-    console.log('Message retrieval started.');
-    const msgsCleanedResultsArr = [];
-    for (const msgIdElem of messageIdMetaData) {
-      let Id = msgIdElem.id;
-      const messagesDataDump = await gmail.users.messages.get({ userId: 'me', id: Id, format: 'metadata' });
-      const headersArr = messagesDataDump.data.payload.headers;
+    //   Get message id from user.messages.list
+    const msgMetaData = await gmail.users.messages.list({
+      userId: 'me',
+      pageToken: nextPageExists,
+    });
+    const userMsgIds = msgMetaData.data.messages;
+    nextPageExists = msgMetaData.data.nextPageToken;
 
-      const filteredHeaderData = headersArr.filter(element => {
-        if (element.name === 'Subject' || element.name === 'From' || element.name === 'Date' || element.name === 'List-Unsubscribe') {
+    console.log(`User ids retrieved successfully`);
+    return { ids: userMsgIds, nextToken: nextPageExists };
+  } catch (e) {
+    console.log('Error occurred during user messages-ID retrieval', e);
+  }
+}
+
+async function getUserRawMessages(authClient, userMsgIds) {
+  try {
+    const gmail = google.gmail({ version: 'v1', auth: authClient });
+    console.log('Gmail instance created successfully on step 2.');
+    // Get messages using above received ids and return array of IDS
+    // Create an array of ids to get messages using Promise.all
+    const userRawMsgArr = userMsgIds.map(item => {
+      let msgId = item.id;
+      return gmail.users.messages.get({
+        userId: 'me',
+        id: msgId,
+        format: 'metadata',
+      });
+    });
+
+    const userRawMsgsData = await Promise.all(userRawMsgArr);
+    console.log('User(s) raw messages data retrieved successfully', userRawMsgsData.length);
+    return userRawMsgsData;
+  } catch (e) {
+    console.log('Error occurred during user raw messages data retrieval', e);
+  }
+}
+
+async function getCleanedUserMessageObj(userRawMsgsData) {
+  try {
+    console.log('Message cleaning started for thrash removal.');
+
+    const allMessagesData = [];
+
+    userRawMsgsData.forEach(userRawMsgDataElement => {
+      // Messages array is extracted and filtered for Subject, From, Date and isMassMail.
+      const msgsHeadersArr = userRawMsgDataElement.data.payload.headers;
+      const filteredMsgsHeaderData = msgsHeadersArr.filter(element => {
+        if (
+          element['name'] === 'Subject' ||
+          element['name'] === 'From' ||
+          element['name'] === 'Date' ||
+          element['name'] === 'List-Unsubscribe'
+        ) {
           return true;
         }
       });
 
-      const headerDataObject = {
-        isMassMail: false,
-      };
-      const headerDataResult = filteredHeaderData.forEach(headerDataElement => {
-        headerDataObject.id = Id;
-        if (headerDataElement['name'] === 'Subject') {
-          headerDataObject.Subject = headerDataElement.value.trim();
+      //   clean object creation which will be used for thrashing the messages
+      const cleanedObject = { id: userRawMsgDataElement.data.id, isMassMail: false };
+      filteredMsgsHeaderData.forEach(filteredHeaderDataElement => {
+        if (filteredHeaderDataElement['name'] === 'Subject') {
+          cleanedObject.Subject = filteredHeaderDataElement.value.trim();
         }
-        if (headerDataElement['name'] === 'From') {
-          const headerFromValToBeCleaned = headerDataElement.value;
+        if (filteredHeaderDataElement['name'] === 'From') {
+          const headerFromValToBeCleaned = filteredHeaderDataElement.value;
           const cleanedHeaderFromVal = headerFromValToBeCleaned.replace(/[<>]/g, '').trim();
-          headerDataObject.From = cleanedHeaderFromVal;
+          cleanedObject.From = cleanedHeaderFromVal;
         }
-        if (headerDataElement['name'] === 'Date') {
-          headerDataObject.Date = headerDataElement.value.trim();
+        if (filteredHeaderDataElement['name'] === 'Date') {
+          cleanedObject.Date = filteredHeaderDataElement.value.trim();
         }
-        if (headerDataElement['name'] === 'List-Unsubscribe') {
-          headerDataObject.isMassMail = true;
+        if (filteredHeaderDataElement['name'] === 'List-Unsubscribe') {
+          cleanedObject.isMassMail = true;
         }
       });
-      msgsCleanedResultsArr.push(headerDataObject);
-    }
-    // console.log('Execution control is on this line now', msgsCleanedResultsArr);
-    return msgsCleanedResultsArr;
+      allMessagesData.push(cleanedObject);
+    });
+    console.log('Async cleaned object is ready', typeof allMessagesData);
+    return allMessagesData;
   } catch (e) {
-    console.log('Error occurred during message retrieval', e);
+    console.log('Error occurred during batch request processing', e);
   }
 }
 
@@ -99,4 +134,10 @@ async function deleteUserMessages(authClient, filteredMsgsDataArr) {
   }
 }
 
-export { retrieveUserMessages, sortUserMessages, deleteUserMessages };
+export {
+  getUserMessageIds,
+  getUserRawMessages,
+  getCleanedUserMessageObj,
+  sortUserMessages,
+  deleteUserMessages,
+};

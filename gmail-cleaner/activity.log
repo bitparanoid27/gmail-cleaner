@@ -1,0 +1,8 @@
+{"timestamp":"2026-03-05T12:13:13.865Z","level":"INFO","message":"FETCH_STARTED","data":{"page":1}}
+{"timestamp":"2026-03-05T12:13:16.413Z","level":"INFO","message":"PAGE_PROCESSED 1","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-05T12:13:16.415Z","level":"INFO","message":"FETCH_STARTED","data":{"page":2}}
+{"timestamp":"2026-03-05T12:13:17.642Z","level":"INFO","message":"PAGE_PROCESSED 2","data":{"msgsfoundonpage":100,"totalmsgs":200}}
+{"timestamp":"2026-03-05T12:13:17.644Z","level":"INFO","message":"FETCH_STARTED","data":{"page":3}}
+{"timestamp":"2026-03-05T12:13:18.321Z","level":"INFO","message":"PAGE_PROCESSED 3","data":{"msgsfoundonpage":100,"totalmsgs":300}}
+{"timestamp":"2026-03-05T12:13:18.421Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":300}}
+{"timestamp":"2026-03-05T12:13:19.917Z","level":"INFO","message":"BATCH_TRASH_FINISHED","data":{"msgsTrashed":149}}

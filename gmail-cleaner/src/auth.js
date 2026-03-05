@@ -1,7 +1,6 @@
 /* External modules */
 import path from 'node:path';
 import { fileURLToPath } from 'url';
-import process from 'node:process';
 import { authenticate } from '@google-cloud/local-auth';
 import { google } from 'googleapis';
 import fs from 'node:fs/promises';
