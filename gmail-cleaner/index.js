@@ -6,6 +6,8 @@ import {
   getUserMessageIds,
   getUserRawMessages,
   getCleanedUserMessageObj,
+  getBulkUnsubscribeMsgs,
+  sortBulkUnsubscribeMsgs,
 } from './src/controllers/user-controllers.js';
 import { logger } from './src/utils/logger.js';
 
@@ -48,8 +50,8 @@ async function trashMessagesManager() {
     await logger.loggerLog('info', 'FETCH_FINISHED', { msgsfetched: allProcessed.length });
 
     const trashQueue = await sortUserMessages(allProcessed);
-    await deleteUserMessages(auth, trashQueue);
-    await logger.loggerLog('info', 'BATCH_TRASH_FINISHED', { msgsTrashed: trashQueue.length });
+    // await deleteUserMessages(auth, trashQueue);
+    // await logger.loggerLog('info', 'BATCH_TRASH_FINISHED', { msgsTrashed: trashQueue.length });
     //
   } catch (error) {
     console.error('The Orchestrator encountered a fatal error:', error);
@@ -57,4 +59,9 @@ async function trashMessagesManager() {
     //
   }
 }
-trashMessagesManager();
+// trashMessagesManager();
+
+const { ids, nexttoken } = await getUserMessageIds(auth, null, 'unsubscribe');
+const userRawMsgsData = await getUserRawMessages(auth, ids);
+const bulkMailDataArr = await getBulkUnsubscribeMsgs(userRawMsgsData);
+await sortBulkUnsubscribeMsgs(bulkMailDataArr);
