@@ -13,3 +13,131 @@
 {"timestamp":"2026-03-09T13:30:51.457Z","level":"INFO","message":"FETCH_STARTED","data":{"page":3}}
 {"timestamp":"2026-03-09T13:30:52.784Z","level":"INFO","message":"PAGE_PROCESSED 3","data":{"msgsfoundonpage":100,"totalmsgs":300}}
 {"timestamp":"2026-03-09T13:30:52.814Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":300}}
+{"timestamp":"2026-03-10T08:01:45.472Z","level":"INFO","message":"FETCH_STARTED","data":{"page":1}}
+{"timestamp":"2026-03-10T08:01:47.205Z","level":"INFO","message":"PAGE_PROCESSED 1","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T08:01:47.207Z","level":"INFO","message":"FETCH_STARTED","data":{"page":2}}
+{"timestamp":"2026-03-10T08:01:48.735Z","level":"INFO","message":"PAGE_PROCESSED 2","data":{"msgsfoundonpage":100,"totalmsgs":200}}
+{"timestamp":"2026-03-10T08:01:48.737Z","level":"INFO","message":"FETCH_STARTED","data":{"page":3}}
+{"timestamp":"2026-03-10T08:01:49.792Z","level":"INFO","message":"PAGE_PROCESSED 3","data":{"msgsfoundonpage":100,"totalmsgs":300}}
+{"timestamp":"2026-03-10T08:01:49.804Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":300}}
+{"timestamp":"2026-03-10T08:04:43.299Z","level":"INFO","message":"FETCH_STARTED","data":{"page":1}}
+{"timestamp":"2026-03-10T08:04:44.696Z","level":"INFO","message":"PAGE_PROCESSED 1","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T08:04:44.697Z","level":"INFO","message":"FETCH_STARTED","data":{"page":2}}
+{"timestamp":"2026-03-10T08:04:45.768Z","level":"INFO","message":"PAGE_PROCESSED 2","data":{"msgsfoundonpage":100,"totalmsgs":200}}
+{"timestamp":"2026-03-10T08:04:45.770Z","level":"INFO","message":"FETCH_STARTED","data":{"page":3}}
+{"timestamp":"2026-03-10T08:04:46.794Z","level":"INFO","message":"PAGE_PROCESSED 3","data":{"msgsfoundonpage":100,"totalmsgs":300}}
+{"timestamp":"2026-03-10T08:04:46.803Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":300}}
+{"timestamp":"2026-03-10T13:26:53.771Z","level":"INFO","message":"FETCH_STARTED","data":{"page":"1"}}
+{"timestamp":"2026-03-10T13:26:56.060Z","level":"INFO","message":"PAGE_PROCESSED 1","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T13:26:56.061Z","level":"INFO","message":"FETCH_STARTED","data":{"page":2}}
+{"timestamp":"2026-03-10T13:26:57.257Z","level":"INFO","message":"PAGE_PROCESSED 2","data":{"msgsfoundonpage":100,"totalmsgs":200}}
+{"timestamp":"2026-03-10T13:26:57.260Z","level":"INFO","message":"FETCH_STARTED","data":{"page":3}}
+{"timestamp":"2026-03-10T13:26:58.382Z","level":"INFO","message":"PAGE_PROCESSED 3","data":{"msgsfoundonpage":100,"totalmsgs":300}}
+{"timestamp":"2026-03-10T13:26:58.418Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":300}}
+{"timestamp":"2026-03-10T13:29:13.981Z","level":"INFO","message":"FETCH_STARTED","data":{"page":"1"}}
+{"timestamp":"2026-03-10T13:29:15.499Z","level":"INFO","message":"PAGE_PROCESSED 1","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T13:29:15.500Z","level":"INFO","message":"FETCH_STARTED","data":{"page":2}}
+{"timestamp":"2026-03-10T13:29:16.580Z","level":"INFO","message":"PAGE_PROCESSED 2","data":{"msgsfoundonpage":100,"totalmsgs":200}}
+{"timestamp":"2026-03-10T13:29:16.584Z","level":"INFO","message":"FETCH_STARTED","data":{"page":3}}
+{"timestamp":"2026-03-10T13:29:17.650Z","level":"INFO","message":"PAGE_PROCESSED 3","data":{"msgsfoundonpage":100,"totalmsgs":300}}
+{"timestamp":"2026-03-10T13:29:17.653Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":300}}
+{"timestamp":"2026-03-10T13:31:17.336Z","level":"INFO","message":"FETCH_STARTED","data":{"page":"1"}}
+{"timestamp":"2026-03-10T13:31:18.981Z","level":"INFO","message":"PAGE_PROCESSED 1","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T13:31:18.983Z","level":"INFO","message":"FETCH_STARTED","data":{"page":2}}
+{"timestamp":"2026-03-10T13:31:20.124Z","level":"INFO","message":"PAGE_PROCESSED 2","data":{"msgsfoundonpage":100,"totalmsgs":200}}
+{"timestamp":"2026-03-10T13:31:20.125Z","level":"INFO","message":"FETCH_STARTED","data":{"page":3}}
+{"timestamp":"2026-03-10T13:31:21.257Z","level":"INFO","message":"PAGE_PROCESSED 3","data":{"msgsfoundonpage":100,"totalmsgs":300}}
+{"timestamp":"2026-03-10T13:31:21.260Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":300}}
+{"timestamp":"2026-03-10T13:32:12.460Z","level":"INFO","message":"FETCH_STARTED","data":{"page":"1"}}
+{"timestamp":"2026-03-10T13:32:15.357Z","level":"INFO","message":"PAGE_PROCESSED 1","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T13:32:15.358Z","level":"INFO","message":"FETCH_STARTED","data":{"page":2}}
+{"timestamp":"2026-03-10T13:32:17.121Z","level":"INFO","message":"PAGE_PROCESSED 2","data":{"msgsfoundonpage":100,"totalmsgs":200}}
+{"timestamp":"2026-03-10T13:32:17.123Z","level":"INFO","message":"FETCH_STARTED","data":{"page":3}}
+{"timestamp":"2026-03-10T13:32:18.333Z","level":"INFO","message":"PAGE_PROCESSED 3","data":{"msgsfoundonpage":100,"totalmsgs":300}}
+{"timestamp":"2026-03-10T13:32:18.333Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":300}}
+{"timestamp":"2026-03-10T13:33:58.796Z","level":"INFO","message":"FETCH_STARTED","data":{"page":"1"}}
+{"timestamp":"2026-03-10T13:34:00.223Z","level":"INFO","message":"PAGE_PROCESSED 1","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T13:34:00.224Z","level":"INFO","message":"FETCH_STARTED","data":{"page":2}}
+{"timestamp":"2026-03-10T13:34:01.301Z","level":"INFO","message":"PAGE_PROCESSED 2","data":{"msgsfoundonpage":100,"totalmsgs":200}}
+{"timestamp":"2026-03-10T13:34:01.302Z","level":"INFO","message":"FETCH_STARTED","data":{"page":3}}
+{"timestamp":"2026-03-10T13:34:02.295Z","level":"INFO","message":"PAGE_PROCESSED 3","data":{"msgsfoundonpage":100,"totalmsgs":300}}
+{"timestamp":"2026-03-10T13:34:02.298Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":300}}
+{"timestamp":"2026-03-10T13:34:32.589Z","level":"INFO","message":"FETCH_STARTED","data":{"page":"3"}}
+{"timestamp":"2026-03-10T13:34:34.204Z","level":"INFO","message":"PAGE_PROCESSED 3","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T13:34:34.205Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":100}}
+{"timestamp":"2026-03-10T13:35:05.121Z","level":"INFO","message":"FETCH_STARTED","data":{"page":"3"}}
+{"timestamp":"2026-03-10T13:35:06.903Z","level":"INFO","message":"PAGE_PROCESSED 3","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T13:35:06.907Z","level":"INFO","message":"FETCH_STARTED","data":{"page":4}}
+{"timestamp":"2026-03-10T13:35:08.210Z","level":"INFO","message":"PAGE_PROCESSED 4","data":{"msgsfoundonpage":100,"totalmsgs":200}}
+{"timestamp":"2026-03-10T13:35:08.213Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":200}}
+{"timestamp":"2026-03-10T13:44:16.499Z","level":"INFO","message":"FETCH_STARTED","data":{"page":"3"}}
+{"timestamp":"2026-03-10T13:44:18.033Z","level":"INFO","message":"PAGE_PROCESSED 3","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T13:44:18.035Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":100}}
+{"timestamp":"2026-03-10T13:44:24.641Z","level":"INFO","message":"FETCH_STARTED","data":{"page":"1"}}
+{"timestamp":"2026-03-10T13:44:26.432Z","level":"INFO","message":"PAGE_PROCESSED 1","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T13:44:26.435Z","level":"INFO","message":"FETCH_STARTED","data":{"page":2}}
+{"timestamp":"2026-03-10T13:44:27.473Z","level":"INFO","message":"PAGE_PROCESSED 2","data":{"msgsfoundonpage":100,"totalmsgs":200}}
+{"timestamp":"2026-03-10T13:44:27.475Z","level":"INFO","message":"FETCH_STARTED","data":{"page":3}}
+{"timestamp":"2026-03-10T13:44:28.458Z","level":"INFO","message":"PAGE_PROCESSED 3","data":{"msgsfoundonpage":100,"totalmsgs":300}}
+{"timestamp":"2026-03-10T13:44:28.461Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":300}}
+{"timestamp":"2026-03-10T13:45:20.197Z","level":"INFO","message":"FETCH_STARTED","data":{"page":"1"}}
+{"timestamp":"2026-03-10T13:45:21.528Z","level":"INFO","message":"PAGE_PROCESSED 1","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T13:45:21.531Z","level":"INFO","message":"FETCH_STARTED","data":{"page":2}}
+{"timestamp":"2026-03-10T13:45:22.621Z","level":"INFO","message":"PAGE_PROCESSED 2","data":{"msgsfoundonpage":100,"totalmsgs":200}}
+{"timestamp":"2026-03-10T13:45:22.624Z","level":"INFO","message":"FETCH_STARTED","data":{"page":3}}
+{"timestamp":"2026-03-10T13:45:23.663Z","level":"INFO","message":"PAGE_PROCESSED 3","data":{"msgsfoundonpage":100,"totalmsgs":300}}
+{"timestamp":"2026-03-10T13:45:23.664Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":300}}
+{"timestamp":"2026-03-10T13:45:30.054Z","level":"INFO","message":"FETCH_STARTED","data":{"page":"3"}}
+{"timestamp":"2026-03-10T13:45:31.642Z","level":"INFO","message":"PAGE_PROCESSED 3","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T13:45:31.643Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":100}}
+{"timestamp":"2026-03-10T13:54:29.372Z","level":"INFO","message":"FETCH_STARTED","data":{"page":"3"}}
+{"timestamp":"2026-03-10T13:54:30.894Z","level":"INFO","message":"PAGE_PROCESSED 3","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T13:54:30.897Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":100}}
+{"timestamp":"2026-03-10T13:54:37.511Z","level":"INFO","message":"FETCH_STARTED","data":{"page":"2"}}
+{"timestamp":"2026-03-10T13:54:38.995Z","level":"INFO","message":"PAGE_PROCESSED 2","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T13:54:38.998Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":100}}
+{"timestamp":"2026-03-10T13:55:20.872Z","level":"INFO","message":"FETCH_STARTED","data":{"page":1}}
+{"timestamp":"2026-03-10T13:55:22.230Z","level":"INFO","message":"PAGE_PROCESSED 1","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T13:55:22.231Z","level":"INFO","message":"FETCH_STARTED","data":{"page":2}}
+{"timestamp":"2026-03-10T13:55:23.264Z","level":"INFO","message":"PAGE_PROCESSED 2","data":{"msgsfoundonpage":100,"totalmsgs":200}}
+{"timestamp":"2026-03-10T13:55:23.267Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":200}}
+{"timestamp":"2026-03-10T13:59:07.271Z","level":"INFO","message":"FETCH_STARTED","data":{"page":1}}
+{"timestamp":"2026-03-10T13:59:08.735Z","level":"INFO","message":"PAGE_PROCESSED 1","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T13:59:08.736Z","level":"INFO","message":"FETCH_STARTED","data":{"page":2}}
+{"timestamp":"2026-03-10T13:59:09.745Z","level":"INFO","message":"PAGE_PROCESSED 2","data":{"msgsfoundonpage":100,"totalmsgs":200}}
+{"timestamp":"2026-03-10T13:59:09.747Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":200}}
+{"timestamp":"2026-03-10T14:04:27.884Z","level":"INFO","message":"FETCH_STARTED","data":{"page":1}}
+{"timestamp":"2026-03-10T14:04:29.391Z","level":"INFO","message":"PAGE_PROCESSED 1","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T14:04:29.394Z","level":"INFO","message":"FETCH_STARTED","data":{"page":2}}
+{"timestamp":"2026-03-10T14:04:30.465Z","level":"INFO","message":"PAGE_PROCESSED 2","data":{"msgsfoundonpage":100,"totalmsgs":200}}
+{"timestamp":"2026-03-10T14:04:30.466Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":200}}
+{"timestamp":"2026-03-10T15:45:54.607Z","level":"INFO","message":"FETCH_STARTED","data":{"page":1}}
+{"timestamp":"2026-03-10T15:45:56.641Z","level":"INFO","message":"PAGE_PROCESSED 1","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T15:45:56.642Z","level":"INFO","message":"FETCH_STARTED","data":{"page":2}}
+{"timestamp":"2026-03-10T15:45:57.768Z","level":"INFO","message":"PAGE_PROCESSED 2","data":{"msgsfoundonpage":100,"totalmsgs":200}}
+{"timestamp":"2026-03-10T15:45:57.769Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":200}}
+{"timestamp":"2026-03-10T16:00:50.931Z","level":"INFO","message":"FETCH_STARTED","data":{"page":1}}
+{"timestamp":"2026-03-10T16:00:53.050Z","level":"INFO","message":"PAGE_PROCESSED 1","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T16:00:53.053Z","level":"INFO","message":"FETCH_STARTED","data":{"page":2}}
+{"timestamp":"2026-03-10T16:00:54.133Z","level":"INFO","message":"PAGE_PROCESSED 2","data":{"msgsfoundonpage":100,"totalmsgs":200}}
+{"timestamp":"2026-03-10T16:00:54.134Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":200}}
+{"timestamp":"2026-03-10T16:02:27.376Z","level":"INFO","message":"FETCH_STARTED","data":{"page":1}}
+{"timestamp":"2026-03-10T16:02:28.855Z","level":"INFO","message":"PAGE_PROCESSED 1","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T16:02:28.858Z","level":"INFO","message":"FETCH_STARTED","data":{"page":2}}
+{"timestamp":"2026-03-10T16:02:29.970Z","level":"INFO","message":"PAGE_PROCESSED 2","data":{"msgsfoundonpage":100,"totalmsgs":200}}
+{"timestamp":"2026-03-10T16:02:29.973Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":200}}
+{"timestamp":"2026-03-10T16:02:37.008Z","level":"INFO","message":"FETCH_STARTED","data":{"page":1}}
+{"timestamp":"2026-03-10T16:02:38.596Z","level":"INFO","message":"PAGE_PROCESSED 1","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T16:02:38.597Z","level":"INFO","message":"FETCH_STARTED","data":{"page":2}}
+{"timestamp":"2026-03-10T16:02:39.630Z","level":"INFO","message":"PAGE_PROCESSED 2","data":{"msgsfoundonpage":100,"totalmsgs":200}}
+{"timestamp":"2026-03-10T16:02:39.631Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":200}}
+{"timestamp":"2026-03-10T16:15:47.408Z","level":"INFO","message":"FETCH_STARTED","data":{"page":1}}
+{"timestamp":"2026-03-10T16:15:48.862Z","level":"INFO","message":"PAGE_PROCESSED 1","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T16:15:48.863Z","level":"INFO","message":"FETCH_STARTED","data":{"page":2}}
+{"timestamp":"2026-03-10T16:15:49.948Z","level":"INFO","message":"PAGE_PROCESSED 2","data":{"msgsfoundonpage":100,"totalmsgs":200}}
+{"timestamp":"2026-03-10T16:15:49.951Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":200}}
+{"timestamp":"2026-03-10T16:16:47.767Z","level":"INFO","message":"FETCH_STARTED","data":{"page":1}}
+{"timestamp":"2026-03-10T16:16:49.303Z","level":"INFO","message":"PAGE_PROCESSED 1","data":{"msgsfoundonpage":100,"totalmsgs":100}}
+{"timestamp":"2026-03-10T16:16:49.307Z","level":"INFO","message":"FETCH_STARTED","data":{"page":2}}
+{"timestamp":"2026-03-10T16:16:50.426Z","level":"INFO","message":"PAGE_PROCESSED 2","data":{"msgsfoundonpage":100,"totalmsgs":200}}
+{"timestamp":"2026-03-10T16:16:50.429Z","level":"INFO","message":"FETCH_FINISHED","data":{"msgsfetched":200}}

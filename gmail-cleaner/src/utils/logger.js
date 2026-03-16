@@ -6,7 +6,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const logFilePath = path.join(__dirname, '..', '..', 'activity.log');
-console.log(logFilePath);
 
 class ActivityLogger {
   constructor() {}

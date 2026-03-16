@@ -1,79 +1,124 @@
 /* External modules required are  */
 import { google } from 'googleapis';
+import 'dotenv/config';
+import pLimit from 'p-limit';
 /* Internal modules required are  */
+import { loggerPino } from '../utils/logger-pino.js';
+const log = loggerPino.child({ module: 'gmail-api-worker' });
 
-async function getUserMessageIds(authClient, pageToken, optionalqueryparam = null) {
-  //   Retrieve user messages from 1 or more than 1 inbox page(s).
+async function getMessageIds(gmailInstance, pageToken, optionalqueryparam = null) {
   try {
-    const gmail = google.gmail({ version: 'v1', auth: authClient });
-    console.log('Gmail instance created successfully on step 1.');
+    /*Only interesed in storing pageToken exists true/false.
+    To ensure when token is received store the boolean equivalent instead of real token.*/
+    log.debug({ hasPageToken: !!pageToken, actionWhere: 'Retrieve_ids' }, 'SERVICE_INVOKED');
 
-    let nextPageExists = pageToken;
-
-    if (optionalqueryparam !== 'unsubscribe') {
-      optionalqueryparam = null;
-    }
+    // if 'unsubscribe' received retrieve mass-mailers so they can be unsubscribed from.
+    const query = optionalqueryparam === 'unsubscribe' ? 'unsubscribe' : null;
+    log.debug({ incomingParam: query }, 'MSG_IDS_FETCH_STARTED');
 
     //   Get message id from user.messages.list
-    const msgMetaData = await gmail.users.messages.list({
+    const msgMetaData = await gmailInstance.users.messages.list({
       userId: 'me',
-      pageToken: nextPageExists,
-      q: optionalqueryparam,
+      pageToken: pageToken,
+      q: query,
     });
-    const userMsgIds = msgMetaData.data.messages;
-    nextPageExists = msgMetaData.data.nextPageToken;
+    const userMsgIds = msgMetaData.data.messages || [];
+    const nextPageExists = msgMetaData.data.nextPageToken;
 
-    console.log(`User ids retrieved successfully`);
+    log.debug(
+      { msgIdsFound: userMsgIds.length, nextPageTokenFound: nextPageExists ? true : false },
+      'MSG_IDS_FETCH_FINISHED',
+    );
+
     return { ids: userMsgIds, nextToken: nextPageExists };
-  } catch (e) {
-    console.log('Error occurred during user messages-ID retrieval', e);
+  } catch (error) {
+    log.error(
+      { err: error, actionWhere: 'Retrieve_ids' },
+      'Encountered error in getUserMessageIds fn.',
+    );
+    throw error;
   }
 }
 
-async function getUserRawMessages(authClient, userMsgIds) {
+async function getRawMessages(gmailInstance, userMsgIds) {
   try {
-    const gmail = google.gmail({ version: 'v1', auth: authClient });
-    console.log('Gmail instance created successfully on step 2.');
-    // Get messages using above received ids and return array of IDS
-    // Create an array of ids to get messages using Promise.all
+    /* Can't search messages without ids. Return immediately. */
+    if (userMsgIds.length === 0) {
+      log.debug('Received empty array of IDs. Empty array returned');
+      return [];
+    }
+
+    log.debug(
+      { msgIdsReceived: userMsgIds.length === 0 ? false : true, actionWhere: 'Retrieve_msgs' },
+      'MSGS_FETCH_STARTED',
+    );
+
+    /* Set concurrency limit to the msgs fetch fn to ensure it stays within the API limits. 20 value is the set. */
+    const limit = pLimit(parseInt(process.env.GMAIL_API_CONCURRENCY_LIMIT));
+
+    /* Use the userMsgIds array to get emails. */
     const userRawMsgArr = userMsgIds.map(item => {
       let msgId = item.id;
-      return gmail.users.messages.get({
-        userId: 'me',
-        id: msgId,
-        format: 'metadata',
+      return limit(() => {
+        return gmailInstance.users.messages.get({
+          userId: 'me',
+          id: msgId,
+          format: 'metadata',
+        });
       });
     });
 
+    /* Create an array of retrieved emails, using Promise.all */
     const userRawMsgsData = await Promise.all(userRawMsgArr);
-    console.log('User(s) raw messages data retrieved successfully', userRawMsgsData.length);
+
+    // console.log('User(s) raw messages data retrieved successfully', userRawMsgsData.length);
+    log.debug({ retrievedMsgCount: userRawMsgsData.length }, 'MSGS_FETCH_FINISHED');
     return userRawMsgsData;
-  } catch (e) {
-    console.log('Error occurred during user raw messages data retrieval', e);
+  } catch (error) {
+    // console.log('Error occurred during user raw messages data retrieval', e);
+    log.error(
+      { err: error, batchSize: userMsgIds.length, actionWhere: 'Retrieve_msgs' },
+      'Error occurred in the getUserRawMessages fn.',
+    );
+    throw error;
   }
 }
 
-async function getCleanedUserMessageObj(userRawMsgsData) {
+async function getCleanedMessages(userRawMsgsData) {
   try {
-    console.log('Message cleaning started for thrash removal.');
+    if (userRawMsgsData.length === 0) {
+      log.debug('Empty msgs array received. Returned empty array and fn exited');
+      return [];
+    }
 
+    /* Stores cleaned messages array returned by the function. */
     const allMessagesData = [];
 
+    log.debug(
+      {
+        rawMessagesReceived: userRawMsgsData.length === 0 ? false : true,
+        actionWhere: 'Clean_msgs',
+      },
+      'MSG_CLEANING_STARTED',
+    );
+
     userRawMsgsData.forEach(userRawMsgDataElement => {
-      // Messages array is extracted and filtered for Subject, From, Date and isMassMail.
+      // Extract message array and filter for Subject, From, Date and isMassMail.
       const msgsHeadersArr = userRawMsgDataElement.data.payload.headers;
       const filteredMsgsHeaderData = msgsHeadersArr.filter(element => {
+        const targetHeaders = ['Subject', 'From', 'Date', 'List-Unsubscribe'];
         if (
-          element['name'] === 'Subject' ||
+          /*element['name'] === 'Subject' ||
           element['name'] === 'From' ||
           element['name'] === 'Date' ||
-          element['name'] === 'List-Unsubscribe'
+          element['name'] === 'List-Unsubscribe' ||*/
+          targetHeaders.includes(element['name'])
         ) {
           return true;
         }
       });
 
-      //   clean object creation which will be used for thrashing the messages
+      //   clean object contains messages selected to deleted (trash).
       const cleanedObject = { id: userRawMsgDataElement.data.id, isMassMail: false };
       filteredMsgsHeaderData.forEach(filteredHeaderDataElement => {
         if (filteredHeaderDataElement['name'] === 'Subject') {
@@ -93,18 +138,33 @@ async function getCleanedUserMessageObj(userRawMsgsData) {
       });
       allMessagesData.push(cleanedObject);
     });
-    console.log('Async cleaned object is ready', typeof allMessagesData);
+    log.debug({ cleanedMsgsCount: allMessagesData.length }, 'MSG_CLEANING_FINISHED');
     return allMessagesData;
-  } catch (e) {
-    console.log('Error occurred during batch request processing', e);
+  } catch (error) {
+    debug.error(
+      { err: error, batchSize: userRawMsgsData.length, actionWhere: 'Clean_msgs' },
+      'Error occurred during message cleaning process.',
+    );
+    throw error;
   }
 }
 
-async function sortUserMessages(userMsgsDataArr) {
-  // Segregate the messages marked for deletion.
-
+async function sortMessages(userMsgsDataArr) {
   try {
-    console.log('User messages filteration started.');
+    // Separate mass-mailers for deletion.
+    if (userMsgsDataArr.length === 0) {
+      log.debug('Empty cleaned msgs array received. Returning empty array & early exit triggered.');
+      return [];
+    }
+
+    log.debug(
+      {
+        cleanedMsgsReceived: userMsgsDataArr.length === 0 ? false : true,
+        actionWhere: 'Sort_msgs',
+      },
+      'MSG_SORTING_STARTED',
+    );
+
     const filterMsgsArr = userMsgsDataArr
       .filter(msgElement => {
         if (msgElement.isMassMail) {
@@ -114,18 +174,30 @@ async function sortUserMessages(userMsgsDataArr) {
       .map(msgElementId => {
         return msgElementId.id;
       });
-    console.log('Msgs marked for deletion are:', filterMsgsArr);
+
+    log.debug({ msgsMarkedForDelete: filterMsgsArr.length }, 'MSG_SORTING_FINISHED');
     return filterMsgsArr;
-  } catch (e) {
-    console.log('Error occurred during user message sorting', e);
+  } catch (error) {
+    log.error(
+      { err: error, batchSize: userMsgsDataArr.length, actionWhere: 'Sort_msgs' },
+      'Error occurred during msg sorting.',
+    );
   }
 }
 
-async function deleteUserMessages(authClient, filteredMsgsDataArr) {
+async function deleteMessages(gmailInstance, filteredMsgsDataArr) {
   try {
-    console.log('Messages are being moved to trash.');
-    const gmail = google.gmail({ version: 'v1', auth: authClient });
-    const moveMsgsToTrash = await gmail.users.messages.batchModify({
+    if (filteredMsgsDataArr.length === 0) {
+      log.debug('Empty filtered messages array recieved. Return none & exit condition triggered');
+      return 'None';
+    }
+
+    log.debug(
+      { msgsToBeTrashed: filteredMsgsDataArr.length, actionWhere: 'Delete_msgs' },
+      'MSG_DELETE_STARTED',
+    );
+
+    const moveMsgsToTrash = await gmailInstance.users.messages.batchModify({
       userId: 'me',
       requestBody: {
         ids: filteredMsgsDataArr,
@@ -133,18 +205,32 @@ async function deleteUserMessages(authClient, filteredMsgsDataArr) {
         removeLabelIds: ['INBOX'],
       },
     });
-    console.log(`${filteredMsgsDataArr.length} messages moved successfully to trash`);
-  } catch (e) {
-    console.log('Error occurred during msg movement to trash bin', e);
+    log.debug({ msgsTrashedCount: filteredMsgsDataArr.length }, 'MSG_DELETE_FINISHED');
+  } catch (error) {
+    log.debug(
+      { err: error, batchSize: filteredMsgsDataArr.length, sctionWhere: 'Delete_msgs' },
+      'Error occurred during msg movement to trash bin',
+    );
   }
 }
 
-async function getBulkUnsubscribeMsgs(userRawMsgsData) {
+async function cleanUnsubscribeMessages(userRawMsgsData) {
   try {
-    console.log('Bulk unsubscribe msgs fetch initiated');
+    if (userRawMsgsData.length === 0) {
+      log.debug('Empty messages array received. Returned empty array & exit triggered');
+      return [];
+    }
 
-    const bulkMailersDataArr = [];
+    /* Stores cleaned messages to be returned */
+    const cleanedBulkMailersData = [];
 
+    log.debug(
+      {
+        rawMessagesReceived: userRawMsgsData.length === 0 ? false : true,
+        actionWhere: 'Clean_msgs_unsubscribe_mass_mailers',
+      },
+      'MSG_CLEANING_STARTED',
+    );
     userRawMsgsData.forEach(rawMsgElement => {
       // retrieve headers array i.e. messages from the incoming payload
       const headersArr = rawMsgElement.data.payload.headers;
@@ -168,52 +254,41 @@ async function getBulkUnsubscribeMsgs(userRawMsgsData) {
           bulkMailers.From = bulkMailData.value.replace(/[<>]/g, '');
         }
       });
-      bulkMailersDataArr.push(bulkMailers);
+      cleanedBulkMailersData.push(bulkMailers);
     });
 
-    console.log('Break 1', bulkMailersDataArr.length);
-
-    // const cleanedBulkMailerData = [];
-    // const bulkMailResults = {};
-    // bulkMailersDataArr
-    //   .filter(subsMailData => {
-    //     if (subsMailData['ListUnsubscribe']) {
-    //       return true;
-    //     }
-    //   })
-    //   .forEach(item => {
-    //     const presentKeys = Object.keys(bulkMailResults);
-    //     if (!presentKeys.includes(item['From'])) {
-    //       bulkMailResults[item['From']] = {
-    //         count: 1,
-    //         unsuburl: [item['ListUnsubscribe']],
-    //       };
-    //     } else {
-    //       bulkMailResults[item['From']].count++;
-    //       let nextUrl = item['ListUnsubscribe'];
-    //       bulkMailResults[item['From']].unsuburl.push(nextUrl);
-    //     }
-    //   });
-    // cleanedBulkMailerData.push(bulkMailResults);
-    //
-    // data-testing
-    //
-    // let result = cleanedBulkMailerData;
-    // console.log('Break 2', result);
-
-    console.log('Bulk unsubscribe msgs fetch finished');
-    return bulkMailersDataArr;
-  } catch (e) {
-    console.log('Error occurred during bulk unsubscribe msgs fetch operation', e);
+    log.debug({ cleanedMsgsCount: cleanedBulkMailersData.length }, 'MSG_CLEANING_FINISHED');
+    return cleanedBulkMailersData;
+  } catch (error) {
+    log.debug(
+      {
+        err: error,
+        batchSize: userRawMsgsData.length,
+        actionWhere: 'Clean_msgs_unsubscribe_mass_mailers',
+      },
+      'Error occurred during unsubscribe msg cleaning operation',
+    );
+    throw error;
   }
 }
 
-async function sortBulkUnsubscribeMsgs(bulkMailersDataArr) {
+async function sortUnsubscribeMessages(bulkMailersDataArr) {
   try {
-    console.log('Mass-mailers sorting process initiated');
+    if (bulkMailersDataArr.length === 0) {
+      log.debug('Empty messages array received. Returned empty array & exit triggered');
+      return [];
+    }
+    log.debug(
+      {
+        cleanedMsgsReceived: bulkMailersDataArr.length === 0 ? false : true,
+        actionWhere: 'Sort_msgs_unsubscribe_mass_mailers',
+      },
+      'MSG_SORTING_STARTED',
+    );
 
-    const cleanedBulkMailerData = [];
-    const bulkMailResults = {};
+    /* Stores messages to be deleted, after unsubscribing from senders. */
+    const sortedBulkMailersData = [];
+    const bulkMailerMsgMap = {};
     bulkMailersDataArr
       .filter(subsMailData => {
         if (subsMailData['ListUnsubscribe']) {
@@ -221,37 +296,36 @@ async function sortBulkUnsubscribeMsgs(bulkMailersDataArr) {
         }
       })
       .forEach(item => {
-        const presentKeys = Object.keys(bulkMailResults);
+        const presentKeys = Object.keys(bulkMailerMsgMap);
         if (!presentKeys.includes(item['From'])) {
-          bulkMailResults[item['From']] = {
+          bulkMailerMsgMap[item['From']] = {
             count: 1,
             unsuburl: [item['ListUnsubscribe']],
           };
         } else {
-          bulkMailResults[item['From']].count++;
+          bulkMailerMsgMap[item['From']].count++;
           let nextUrl = item['ListUnsubscribe'];
-          bulkMailResults[item['From']].unsuburl.push(nextUrl);
+          bulkMailerMsgMap[item['From']].unsuburl.push(nextUrl);
         }
       });
-    cleanedBulkMailerData.push(bulkMailResults);
+    sortedBulkMailersData.push(bulkMailerMsgMap);
 
-    // data-testing
-    let result = cleanedBulkMailerData;
-    console.log('Break 2', result);
-
-    console.log('Mass-mailers sorting process finished');
-    return cleanedBulkMailerData;
-  } catch (e) {
-    console.log('Error occurred during bulk msgs data sorting', e);
+    log.debug({ msgsMarkedForDelete: sortedBulkMailersData.length }, 'MSG_SORTING_FINISHED');
+    return sortedBulkMailersData;
+  } catch (error) {
+    log.error(
+      { err: error, batchSize: bulkMailersDataArr.length, actionWhere: 'Sort_msgs' },
+      'Error occurred during unsubscribe msg sorting.',
+    );
   }
 }
 
 export {
-  getUserMessageIds,
-  getUserRawMessages,
-  getCleanedUserMessageObj,
-  sortUserMessages,
-  deleteUserMessages,
-  getBulkUnsubscribeMsgs,
-  sortBulkUnsubscribeMsgs,
+  getMessageIds,
+  getRawMessages,
+  getCleanedMessages,
+  sortMessages,
+  deleteMessages,
+  cleanUnsubscribeMessages,
+  sortUnsubscribeMessages,
 };
