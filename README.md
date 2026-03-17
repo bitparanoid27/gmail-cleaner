@@ -1,7 +1,7 @@
 # gmail-cleaner
 A CLI tool to Gmail inbox. Headless Gmail Aggregator & Cleaner
 
-![Demo of the CLI in action](./demo.gif)
+![Demo of the CLI in action](./media/user-demo.gif)
 *A high-performance, concurrent CLI tool built in Node.js to safely aggregate, parse, and batch-process large volumes of Gmail data via the Google REST API.*
 
 ---
